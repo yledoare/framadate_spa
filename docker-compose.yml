@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+    smtp:
+        container_name: framadate-smtp
+        image: jeanberu/mailcatcher
+        ports:
+          - "1080:1080"
+
+    mysql:
+        container_name: framadate-mysql
+        image: mariadb:10.4
+        environment:
+            MYSQL_ROOT_PASSWORD: rootpassfordev
+            MYSQL_DATABASE: framadate
+            MYSQL_USER: framadate
+            MYSQL_PASSWORD: framadatepasswd
+
+    framadate:
+        container_name: framadate-php
+        image: lefilament/framadate:latest
+        environment:
+            MYSQL_USER: root
+            MYSQL_PASSWORD: rootpassfordev
+            MYSQL_DB: framadate
+            ADMIN_USER: framadate
+            ADMIN_PASSWORD: framadate
+            APP_NAME: Framadate
+            DOMAIN: framadate.bzh.org
+            ADMIN_MAIL: yann@mail
+            MYSQL_USER: framadate
+            MYSQL_PASSWORD: framadatepasswd 
+            MYSQL_DB: framadate
+            MYSQL_HOST: mysql
+            MYSQL_PORT: 3306
+            ADMIN_USER: frama
+            ADMIN_PASSWORD: passwd
+            SMTP_SERVER: smtp:1025
+        ports:
+            - "8880:80"
+        depends_on:
+            - mysql
+            - smtp
